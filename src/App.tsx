@@ -1,33 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
+import { useDispatch, useSelector } from 'react-redux'
+import { appendData, setData2, setData, setError, setLoading, toggleData } from './dataSlice';
+import type { RootState } from './store.tsx';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const dispatch = useDispatch();
+  const data = useSelector((state: RootState) => state.data);
+  useEffect(() => {
+    dispatch(setData(true));
+  }, []);
 
   return (
     <>
+      <button onClick={() => dispatch(setData(true))}>Set Data</button>
+      <button onClick={() => dispatch(setData2(true))}>Set Data 2</button>
+      <button onClick={() => dispatch(toggleData())}>Toggle Data</button>
+      <button onClick={() => dispatch(appendData("test"))}>Append Data</button>
+      <button onClick={() => dispatch(setLoading(true))}>Set Loading</button>
+      <button onClick={() => dispatch(setError("test"))}>Set Error</button>
+
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <h1>Data</h1>
+        <p>{data.data.toString()}</p>
+        <p>{data.data2.toString()}</p>
+        <p>{data.appendData.toString()}</p>
+        <p>{data.loading.toString()}</p>
+        <p>{data.error}</p>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
